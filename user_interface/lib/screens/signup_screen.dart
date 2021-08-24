@@ -1,15 +1,87 @@
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:user_interface/screens/signup_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:user_interface/screens/login_screen.dart';
 import 'package:user_interface/utilities/constraints.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpState extends State<SignUp> {
   bool _rememberMe = false;
+
+  Widget _buildFirstNameTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'First Name',
+          style: kLabelStyle,
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            keyboardType: TextInputType.text,
+            style: TextStyle(
+              color: Color(0xFF000000),
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.person,
+                color: Color(0xFF707070),
+              ),
+              hintText: 'Enter your First Name',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLastNameTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Last Name',
+          style: kLabelStyle,
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            keyboardType: TextInputType.text,
+            style: TextStyle(
+              color: Color(0xFF000000),
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.person_add,
+                color: Color(0xFF707070),
+              ),
+              hintText: 'Enter your Last Name',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -122,20 +194,20 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginBtn() {
+  Widget _buildSignUpBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () => print('Sign Up Button Pressed'),
         padding: EdgeInsets.all(25.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
         color: Color(0xFFFF5B5B),
         child: Text(
-          'LOGIN',
+          'SIGN UP',
           style: TextStyle(
             color: Color(0xFFFFFFFF),
             letterSpacing: 1.5,
@@ -170,9 +242,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
     return GestureDetector(
       onTap: () => print('login with google pressed'),
-      child: Container(
-        height: 60.0,
-        width: 60.0,
+      child: Row(children: <Widget>[
+Container(
+        height: 50.0,
+        width: 50.0,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.white,
@@ -188,6 +261,16 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+      Text(
+          'Sign Up with Google',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+          textAlign: TextAlign.right,
+        ),
+      ]
+    )
     );
   }
 
@@ -197,12 +280,6 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildSocialBtn(
-            () => print('Login with Facebook'),
-            AssetImage(
-              'assets/logos/facebook.jpg',
-            ),
-          ),
           _buildSocialBtn(
             () => print('Login with Google'),
             AssetImage(
@@ -217,13 +294,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignupBtn() {
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context,MaterialPageRoute(builder: (context) => SignUp()))
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginScreen()))
       },
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Don\'t have an Account? ',
+              text: 'Already have an Account? ',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18.0,
@@ -231,7 +309,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             TextSpan(
-              text: 'Sign Up',
+              text: 'Login',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18.0,
@@ -270,15 +348,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 child: Align(
-                  alignment: Alignment.bottomRight,
+                  alignment: Alignment.bottomLeft,
                   child: Container(
                     width: double.infinity,
                     height: 400,
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(360)),
-                       ),
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.only(topRight: Radius.circular(360)),
+                    ),
                   ),
                 ),
               ),
@@ -303,14 +381,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 30.0),
+                      _buildFirstNameTF(),
+                      SizedBox(height: 30.0),
+                      _buildLastNameTF(),
+                      SizedBox(height: 30.0),
                       _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      SizedBox(height: 30.0),
                       _buildPasswordTF(),
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
-                      _buildLoginBtn(),
+                      _buildSignUpBtn(),
                       _buildSignInWithText(),
                       _buildSocialBtnRow(),
                       _buildSignupBtn(),
