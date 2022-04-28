@@ -1,47 +1,24 @@
-import 'package:app/screens/first_login.dart';
+import 'package:app/screens/set_boarding_point.dart';
 import 'package:app/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
-import '../utilities/authentication.dart';
 import '../utilities/constraints.dart';
 
+class FirstLogin extends StatefulWidget {
+  const FirstLogin({Key? key, required User user})
+      : _user = user,
+        super(key: key);
 
-Future<void> _handleSignIn(context) async {
-    User? user =
-    await Authentication.signInWithGoogle(context: context);
-
-    try{
-      if(user != null){
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => FirstLogin(user: user)),
-        );
-      }
-    }catch(e){
-      print(e);
-    }
-}
-
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final User _user;
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _FirstLoginstate createState() => _FirstLoginstate();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _FirstLoginstate extends State<FirstLogin> {
   bool _rememberMe = false;
-
-  // On Init
-  @override
-  void initState() {
-    super.initState();
-    Authentication.initializeFirebase(context: context);
-  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -154,20 +131,60 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginBtn() {
+  Widget _buildBusNumberTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          width: 250.0,
+          child: const TextField(
+            keyboardType: TextInputType.number,
+            style: TextStyle(
+              color: Color(0xFF000000),
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.directions_bus,
+                color: Color(0xFF707070),
+              ),
+              hintText: 'Bus No.',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPickBoardingPointBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25.0),
-      width: double.infinity,
+      width: 250.0,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
-        padding: const EdgeInsets.all(25.0),
+        onPressed: () => {
+          // Navigate to setBoardingPoint page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SetBoardingPoint()),
+          ),
+
+        },
+        padding: const EdgeInsets.all(20.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        color: const Color(0xFFFF5B5B),
+        // Grey color
+        color: const Color(0xFF222222),
         child: const Text(
-          'LOGIN',
+          'Pick Boarding Point',
           style: TextStyle(
             color: Color(0xFFFFFFFF),
             letterSpacing: 1.5,
@@ -180,97 +197,29 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSignInWithText() {
-    return Column(
-      children: const <Widget>[
-        Text(
-          '- OR -',
+  Widget _buildSubmitBtn() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 25.0),
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 5.0,
+        onPressed: () => {
+          // TODO: Add details to firebase
+        },
+        padding: const EdgeInsets.all(25.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        color: const Color(0xFFFF5B5B),
+        child: const Text(
+          'Submit',
           style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
+            color: Color(0xFFFFFFFF),
+            letterSpacing: 1.5,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
           ),
-        ),
-        SizedBox(height: 20.0),
-        Text(
-          'Connect with',
-          style: kLabelStyle,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
-    return GestureDetector(
-      onTap: () => onTap(context),
-      child: Container(
-        height: 60.0,
-        width: 60.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-          image: DecorationImage(
-            image: logo,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(
-                () => print('Login with Facebook'),
-            const AssetImage(
-              'assets/logos/facebook.jpg',
-            ),
-          ),
-          _buildSocialBtn(
-            _handleSignIn,
-            const AssetImage(
-              'assets/logos/google.jpg',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()))
-      },
-      child: RichText(
-        text: const TextSpan(
-          children: [
-            TextSpan(
-              text: 'Don\'t have an Account? ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -301,18 +250,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
                 ),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    width: double.infinity,
-                    height: 400,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(360)),
-                    ),
-                  ),
-                ),
               ),
               SizedBox(
                 height: double.infinity,
@@ -325,27 +262,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Almost There',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'OpenSans',
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      const SizedBox(
-                        height: 30.0,
+                      const Text(
+                        'Fill us with a few details',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'OpenSans',
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      _buildPasswordTF(),
-                      _buildForgotPasswordBtn(),
-                      _buildRememberMeCheckbox(),
-                      _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSocialBtnRow(),
-                      _buildSignupBtn(),
+                      const SizedBox(height: 30.0),
+                      _buildBusNumberTF(),
+                      _buildPickBoardingPointBtn(),
+                      _buildSubmitBtn()
+
                     ],
                   ),
                 ),
