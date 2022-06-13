@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "367024531070",
+    "project_id": "bustracking-ea052",
+    "storage_bucket": "bustracking-ea052.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367024531070:android:54d4093cdb63959f2eda2f",
+        "android_client_info": {
+          "package_name": "com.github.dwabzy.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367024531070-rf1bi8hjb0repl7p5k37r1cdhae631rf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwZp3qcsNcFUf704Bk-dc-O5tcfw5Sv_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367024531070-rf1bi8hjb0repl7p5k37r1cdhae631rf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
